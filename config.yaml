@@ -1,0 +1,50 @@
+# config.yaml - Optimized for Windows with 32GB RAM
+paths:
+  rooms:        "src/data/rooms"
+  wallpapers:   "src/data/wallpapers"
+  wall_masks:   "src/data/masks/wall"
+  obj_masks:    "src/data/masks/objects"
+  corners:      "src/data/corners"
+  out_final:    "src/out/final"
+  out_preview:  "src/out/preview"
+  qc_file:      "src/qc/review_list.txt"
+
+assign: "every_n_rooms:10"   # or "Round Robin"
+
+# Windows 32GB RAM Optimizations
+compose:
+  use_seamless: true         # true -> seamlessClone ، false -> feather blend
+  feather_px: 8              # If use seamless=false
+  min_obj_area: 5000         # Minimum area for object mask (noise filter)
+  workers: 8                  # Increased for 32GB RAM (was 4)
+  batch_size: 4               # Process multiple wallpapers simultaneously
+  max_image_size: 4096        # Increased max image size for high-res processing
+  cache_models: true          # Cache models in memory for faster processing
+  use_mixed_precision: true   # Use FP16 for faster GPU processing
+
+# Memory Management
+memory:
+  max_memory_usage: 0.8       # Use up to 80% of available RAM (25.6GB of 32GB)
+  tile_size: 1024             # Larger tile size for better performance
+  tile_overlap: 128           # Increased overlap for better quality
+  preload_images: true        # Preload images into memory
+  model_cache_size: 4         # Cache up to 4 models in memory
+
+# GPU Optimization
+gpu:
+  device: "auto"              # auto, cuda, cpu
+  memory_fraction: 0.9        # Use 90% of GPU memory
+  allow_growth: true          # Allow GPU memory to grow dynamically
+  mixed_precision: true       # Use mixed precision for speed
+
+# Processing Quality
+quality:
+  semantic_model: "efficientnet-b7"  # Larger model for better quality
+  instance_confidence: 0.3    # Balanced confidence threshold
+  depth_enabled: true         # Enable depth estimation for better quality
+  polygon_precision: 0.001    # Higher precision for polygonization
+  illumination_quality: "high" # High quality illumination transfer
+
+qc:
+  min_wall_area_ratio: 0.05  # Flag if less than 5% of the image is on the wall.
+  max_wall_area_ratio: 0.80  # If more than 80%, flag.
