@@ -307,17 +307,6 @@ src/data/out/per_room_50/
 └── ... (continues for all rooms)
 ```
 
-### Example Scenarios
-
-**5000 Total Composites:**
-- 10 rooms available → 50 cycles through all rooms
-- Each room gets 50 wallpapers × 50 cycles = 2500 composites per room
-- Total: 10 rooms × 2500 = 25,000 composites (exceeds target, stops at 5000)
-
-**1000 Total Composites:**
-- 10 rooms available → 2 cycles through all rooms  
-- Each room gets 50 wallpapers × 2 cycles = 100 composites per room
-- Total: 10 rooms × 100 = 1000 composites (exactly matches target)
 
 ### Performance Expectations
 
