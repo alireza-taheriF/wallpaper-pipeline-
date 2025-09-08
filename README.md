@@ -243,6 +243,98 @@ Typical processing times (Windows 32GB RAM, RTX 3080):
 - 10 wallpapers (batch): ~3-5 minutes
 - With depth estimation: +50% processing time
 
+## Large-Scale Test Guide (Room Switch Every 50)
+
+For large-scale testing scenarios where you need thousands of composites (e.g., 5000+ outputs), use the automated room-switching scripts that change the room every 50 wallpapers. This approach ensures variety in your dataset while maintaining efficient processing.
+
+### Purpose
+- **Variety**: Each room gets exactly 50 wallpapers before switching to the next room
+- **Scalability**: Process thousands of composites systematically
+- **Organization**: Results are organized by room in separate directories
+- **Efficiency**: Leverages Windows optimizations for maximum throughput
+
+### PowerShell Script (Recommended)
+
+```powershell
+# Basic usage - processes 5000 total composites (100 rooms × 50 wallpapers each)
+.\scripts\per_room_50.ps1
+
+# Custom target - processes 1000 total composites
+.\scripts\per_room_50.ps1 -TotalTarget 1000
+
+# Custom parameters
+.\scripts\per_room_50.ps1 -TotalTarget 2000 -WallpapersPerRoom 25 -OutputBaseDir "src/data/out/custom_test"
+```
+
+**Script Features:**
+- Automatically cycles through all available rooms
+- Processes exactly 50 wallpapers per room (configurable)
+- Uses optimal settings: `--use-depth --windows-optimized --memory-limit 0.8 --device auto --deterministic --save-debug --verbose`
+- Creates organized output structure: `src/data/out/per_room_50/<room_name>/`
+- Provides detailed logging with timestamps
+- Handles errors gracefully and continues processing
+
+### CMD Batch Script (Alternative)
+
+For users who cannot run PowerShell:
+
+```cmd
+REM Basic usage
+scripts\per_room_50.cmd
+
+REM Custom target
+scripts\per_room_50.cmd --total-target 1000
+
+REM Custom parameters
+scripts\per_room_50.cmd --total-target 2000 --wallpapers-per-room 25 --output-dir "src/data/out/custom_test"
+```
+
+### Output Structure
+
+Results are organized by room in the following structure:
+```
+src/data/out/per_room_50/
+├── room3/
+│   ├── composites/          # 50 wallpaper composites for room3
+│   ├── masks/              # Wall and object masks
+│   ├── debug/              # Debug visualizations
+│   └── processing_report.json
+├── room4/
+│   ├── composites/          # 50 wallpaper composites for room4
+│   ├── masks/
+│   ├── debug/
+│   └── processing_report.json
+└── ... (continues for all rooms)
+```
+
+### Example Scenarios
+
+**5000 Total Composites:**
+- 10 rooms available → 50 cycles through all rooms
+- Each room gets 50 wallpapers × 50 cycles = 2500 composites per room
+- Total: 10 rooms × 2500 = 25,000 composites (exceeds target, stops at 5000)
+
+**1000 Total Composites:**
+- 10 rooms available → 2 cycles through all rooms  
+- Each room gets 50 wallpapers × 2 cycles = 100 composites per room
+- Total: 10 rooms × 100 = 1000 composites (exactly matches target)
+
+### Performance Expectations
+
+For large-scale runs (5000+ composites):
+- **Processing time**: ~4-8 hours (depending on hardware)
+- **Storage**: ~50-100 GB (with debug images enabled)
+- **Memory usage**: Optimized for 32GB RAM systems
+- **GPU utilization**: Automatic CUDA detection and usage
+
+### Tips for Large-Scale Testing
+
+1. **Start small**: Test with `--total-target 100` first
+2. **Monitor disk space**: Large runs generate significant output
+3. **Use SSD storage**: Faster I/O for better performance
+4. **Check logs**: Scripts provide detailed progress information
+5. **Resume capability**: Scripts can be re-run to continue from where they left off
+
 ## License & External Dependencies
 
 - **MIT License** for this project
