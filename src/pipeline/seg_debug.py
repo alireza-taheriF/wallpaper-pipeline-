@@ -59,3 +59,4 @@ def dump_seg_debug(base, img_rgb, logits_or_labels, label_to_index, wall_class_n
     print(f"[SEG] wall_prob stats: min={float(wall_prob.min()):.3f} max={float(wall_prob.max()):.3f} mean={float(wall_prob.mean()):.3f}")
     return labels, wall_prob
 
+
